@@ -4,7 +4,8 @@ import ROOT as rt
 
 rt.gStyle.SetOptStat(0)
 rt.gStyle.SetTitleFontSize(0.2)
-rt.gStyle.SetLabelSize(0.1,"X")
+rt.gStyle.SetLabelSize(0.05,"X")
+rt.gStyle.SetPadBottomMargin(0.15)
 
 input = sys.argv[1]
 fin = rt.TFile(input,"open")
@@ -17,11 +18,12 @@ window = 15.625e-9*1500.0
 print "INPUT FILE: ",input
 
 # Rates for each channel
-hrate = rt.TH1D("hrate",";FEMCH#;kHz",32,0,32)
+hrate = rt.TH1D("hrate",";FEMCH;kHz",32,0,32)
 
 # first, get npulse distribution for each pmt
 poiseq = "[0]*TMath::Power([1],x)*TMath::Exp(-[1])/TMath::Gamma(x+1.0)"
-c = rt.TCanvas("c","c",1200,1200)
+c = rt.TCanvas("c","Pulse per Beam Window",1200,1200)
+c.Draw()
 hpmts = {}
 hfits = {}
 c.Divide(6,6)
@@ -49,8 +51,14 @@ for ipmt in range(0,32):
 
 hrate.SetMinimum(0)
 hrate.SetMaximum(400)
-crate = rt.TCanvas("c","c",800,400)
-hrate.Draw()
+for ch in range(32):
+    hrate.GetXaxis().SetBinLabel(ch+1,"%d"%(ch))
+crate = rt.TCanvas("crate","Rate per PMT",1400,600)
+crate.SetGridy(1)
+crate.SetGridx(1)
+hrate.SetLineWidth(4)
+hrate.GetXaxis().SetTitleSize(0.05)
+hrate.Draw("hist")
 crate.Update()
 
 raw_input()

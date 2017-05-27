@@ -32,6 +32,11 @@ for ipmt in range(0,32):
 
 cmean = rt.TCanvas("cmean","",1200,400)
 cmean.Draw()
+cmean.SetGridx(1)
+cmean.SetGridy(1)
+hamp.SetMinimum(0)
+hamp.SetMaximum(30)
+hamp.SetLineWidth(4)
 hamp.Draw()
 cmean.Update()
 
